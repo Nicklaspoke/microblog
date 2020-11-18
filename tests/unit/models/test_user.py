@@ -1,8 +1,8 @@
 """
 Contains tests for app.models.User class
 """
-# pylint: disable=redefined-outer-name
-from unittest import mock
+# pylint: disable=redefined-outer-name, unused-argument
+# from unittest import mock
 import pytest
 from app.models import User
 
@@ -27,8 +27,8 @@ def test_new_user(user1):
     assert user1.about_me == 'Hello'
     assert str(user1) == "<User john, john@example.com>"
 
-@mock.patch("app.models.current_app")
-def test_password_hashing(_mock_current_app, user1):
+
+def test_password_hashing(test_app, user1):
     """
     Test setting password for user
     """
@@ -36,8 +36,8 @@ def test_password_hashing(_mock_current_app, user1):
     assert user1.check_password('dog') is False
     assert user1.check_password('cat') is True
 
-@mock.patch("app.models.current_app")
-def test_avatar(_mock_current_app, user1):
+
+def test_avatar(test_app, user1):
     """
     Test creation of Gravatar URL
     """
