@@ -2,4 +2,4 @@ boto >= 2.49.0
 boto3 >= 1.9.203
 ansible <= 2.9.13
 PyMySQL >= 0.9.3
-ansible[azure] # Does not work from file. Need to be installed manually
+# ansible[azure] # Does not work from file. Need to be installed manually
