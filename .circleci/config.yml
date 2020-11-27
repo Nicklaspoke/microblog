@@ -22,13 +22,30 @@ jobs:
           name: Run the tests
           command: docker-compose up microblog-circleci
 
-  # push_to_dockerhub:
+  push_to_dockerhub:
+    environment:
+      IMAGE_NAME: microblog
+    docker:
+    - image: circleci/buildpack-deps:stretch
+    steps:
+      - setup_remote_docker
+      - checkout
+      - run:
+          name: Build Image
+          command: |
+            docker build -t $DOCKERHUB_USERNAME/$IMAGE_NAME -f docker/Dockerfile.prod .
+      - run:
+          name: Push to Dockerhub
+          command: |
+            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+            docker push $DOCKERHUB_USERNAME/microblog:latest
+
 
 workflows:
   test:
     jobs:
       - run_tests
 
-  # deploy:
-  #   jobs:
-  #     - push_to_dockerhub
+  deploy:
+    jobs:
+      - push_to_dockerhub
