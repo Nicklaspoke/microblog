@@ -4,16 +4,25 @@ orbs:
   python: circleci/python@0.2.1
 
 jobs:
-  build-and-test:
-    executor: python/default
+  run_tests:
+    docker:
+      - image: circleci/python:3.7
+    working_directory: ~/microblog
     steps:
+      - setup_remote_docker
       - checkout
-      - python/load-cache
-      - python/save-cache
-      - run: make install-test
-      - run: make test
+
+      - run:
+          name: Install-test dependencies
+          command: |
+            pyhton3 -m venv venv
+            . venv/bin/activate
+            make install-test
+      - run:
+          name: Run the tests
+          command: docker-compose up microblog-circleci
 
 workflows:
-  main:
+  test:
     jobs:
-      - build-and-test
+      - run_tests

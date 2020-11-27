@@ -1,0 +1,19 @@
+FROM python:3.8
+
+WORKDIR /microblog
+
+# COPY . .
+COPY app app
+COPY tests tests
+COPY migrations migrations
+COPY requirements requirements
+COPY requirements.txt microblog.py pytest.ini .coveragerc ./
+COPY run-tests.sh .
+
+RUN python -m venv .venv
+ENV FLASK_APP microblog.py
+RUN .venv/bin/pip3 install -r requirements.txt
+
+RUN chmod +x run-tests.sh
+
+ENTRYPOINT ["./run-tests.sh"]

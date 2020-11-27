@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+  microblog-prod:
+    restart: always
+    image: nicklaspoke/devops-microblog:latest
+    build:
+      context: "."
+      dockerfile: "./docker/Dockerfile_prod"
+    ports:
+      - 8000:5000
+    environment:
+      - SECRET_KEY=f64c4cdfa7844a0cbbc6d1038b91febe
+      - DATABASE_URL=mysql+pymysql://microblog:littlepip@dbserver/microblog
+    links:
+      - prod-db:dbserver
+
+  microblog-test:
+    image: nicklaspoke/devops-microblog:test
+    build:
+      context: "."
+      dockerfile: "./docker/Dockerfile_test"
+    volumes:
+        - .:/microblog
+
+  microblog-circleci:
+    build:
+        context: .
+        dockerfile: ./docker/Dockerfile_circleci
+
+  prod-db:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=scootaloo
+      - MYSQL_DATABASE=microblog
+      - MYSQL_USER=microblog
+      - MYSQL_PASSWORD=littlepip
+    volumes:
+      - /var/lib/mysql:/var/lib/mysql
