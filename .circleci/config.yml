@@ -33,7 +33,7 @@ jobs:
       - run:
           name: Build Image
           command: |
-            docker build -t $DOCKERHUB_USERNAME/$IMAGE_NAME -f docker/Dockerfile.prod .
+            docker build -t $DOCKERHUB_USERNAME/$IMAGE_NAME -f docker/Dockerfile_prod .
       - run:
           name: Push to Dockerhub
           command: |
